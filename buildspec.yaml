@@ -7,7 +7,9 @@ phases:
     commands:
     - echo Logging in to Amazon ECR...
     - aws --version
-    - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+    - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 555918697305.dkr.ecr.us-west-2.amazonaws.com
+    - REPOSITORY_URI=555918697305.dkr.ecr.us-west-2.amazonaws.com/pms-process-penstion-microservice
+    - CONTAINER_NAME=process-pension-service
     - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
     - IMAGE_URI=${REPOSITORY_URI}:${TAG}
   build:
