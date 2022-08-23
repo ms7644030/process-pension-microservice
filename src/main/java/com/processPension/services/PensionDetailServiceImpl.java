@@ -38,81 +38,6 @@ public class PensionDetailServiceImpl implements ProcessPensionService {
 		headers.add("Authorization", header);
 		HttpEntity<String> request = new HttpEntity<String>(headers);
 
-		/*
-		 * PensionerDetail pensionerDetail=
-		 * restTemplate.exchange("http://PENSIONER-DETAIL-SERVICE/pensionerDetail/"+
-		 * aadhaar, HttpMethod.GET,null, PensionerDetail.class).getBody();
-		 */
-		// ResponseEntity<PensionerDetail> response =
-		// restTemplate.getForEntity("http://PENSIONER-DETAIL-SERVICE/pensionerDetail/"+aadhaar,PensionerDetail.class);
-		// ResponseEntity<Object> response =
-		// restTemplate.getForEntity("http://PENSIONER-DETAIL-SERVICE/pensionerDetail/"+aadhaar,Object.class);
-
-		/*
-		 * if(response.getBody() instanceof PensionerDetail) {
-		 * 
-		 * 
-		 * PensionerDetail pensionerDetail = (PensionerDetail) response.getBody();
-		 * 
-		 * String type = pensionerDetail.getPensioner().getSelfOrFamily().trim();
-		 * 
-		 * 
-		 * double lastEarnedSalary = pensionerDetail.getPensioner().getSalaryEarned();
-		 * double allowances = pensionerDetail.getPensioner().getAllowances();
-		 * 
-		 * Bankdetail bankdetail = pensionerDetail.getBankdetail(); String bankType =
-		 * bankdetail.getPublicOrprivate_bank().trim();
-		 * 
-		 * if (type.equalsIgnoreCase("self")) {
-		 * 
-		 * double pensionAmmount = (0.80*lastEarnedSalary)+allowances;
-		 * 
-		 * pensionDetail.setPensionAmount(pensionAmmount);
-		 * 
-		 * } else if (type.equalsIgnoreCase("family")) {
-		 * 
-		 * double pensionAmmount = (0.50*lastEarnedSalary)+allowances;
-		 * 
-		 * pensionDetail.setPensionAmount(pensionAmmount);
-		 * 
-		 * }
-		 * 
-		 * if (bankType.equalsIgnoreCase("public")) {
-		 * 
-		 * pensionDetail.setBankServiceCharge(500.0);
-		 * 
-		 * }
-		 * 
-		 * else if (bankType.equalsIgnoreCase("private")) {
-		 * 
-		 * pensionDetail.setBankServiceCharge(550.0);
-		 * 
-		 * }
-		 * 
-		 * 
-		 * } else if(response.getBody() instanceof String) {
-		 * 
-		 * String value = (String) response.getBody();
-		 * 
-		 * if (value.equalsIgnoreCase("Invalid"))
-		 * 
-		 * throw new BusinessException("601","Invalid Aadhaar");
-		 * 
-		 * }
-		 * 
-		 * 
-		 * return pensionDetail;
-		 * 
-		 */
-
-		// ResponseEntity<String> response = restTemplate
-		// .getForEntity("http://PENSIONER-DETAIL-SERVICE/pensionerDetail/" + aadhaar,
-		// String.class);
-
-		// ResponseEntity<String> authresponse = restTemplate
-		// .getForEntity(authorizationHost + "/api/authorization-service/validate",
-		// String.class);
-
 		ResponseEntity<String> authresponse = restTemplate.exchange(
 				authorizationHost + "/api/authorization-service/validate", HttpMethod.GET, request, String.class);
 
@@ -124,19 +49,6 @@ public class PensionDetailServiceImpl implements ProcessPensionService {
 		}
 
 		else if (isvalid.equalsIgnoreCase("valid")) {
-
-			// HttpHeaders headers1 = new HttpHeaders();
-			// headers.add("Authorization", header);
-			// HttpEntity<String> request1 = new HttpEntity<String>(headers);
-
-			// ResponseEntity<String> response = restTemplate.getForEntity(
-			// pensionerDetailHost + "/api/pensioner-detail-service/pensionerDetail/" +
-			// aadhaar, String.class);
-
-			// ResponseEntity<String> response = restTemplate.exchange(
-			// pensionerDetailHost + "/api/pensioner-detail-service/pensionerDetail/" +
-			// aadhaar, request,
-			// String.class);
 
 			ResponseEntity<String> response = restTemplate.exchange(
 					pensionerDetailHost + "/api/pensioner-detail-service/pensionerDetail/" + aadhaar, HttpMethod.GET,
@@ -154,8 +66,6 @@ public class PensionDetailServiceImpl implements ProcessPensionService {
 				try {
 					PensionerDetail pensionerDetail = mapper.readValue(value, PensionerDetail.class);
 
-					// PensionerDetail pensionerDetail = (PensionerDetail) response.getBody();
-
 					String type = pensionerDetail.getPensioner().getSelfOrFamily().trim();
 
 					double lastEarnedSalary = pensionerDetail.getPensioner().getSalaryEarned();
@@ -163,6 +73,10 @@ public class PensionDetailServiceImpl implements ProcessPensionService {
 
 					Bankdetail bankdetail = pensionerDetail.getBankdetail();
 					String bankType = bankdetail.getPublicOrprivate_bank().trim();
+
+					// TO CALCULATE PENSION AMOUNT AND BANK SERVICE CHARGE BASED ON PENSIONTYPE i.e.
+					// SELF OR FAMILY AND BANK TYPE i.e. PUBLIC OR PRIVATE
+					// RESPECTIVELLY.
 
 					if (type.equalsIgnoreCase("self")) {
 
