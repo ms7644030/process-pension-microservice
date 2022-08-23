@@ -51,24 +51,10 @@ public class processPensionControllerAdvice {
 		return new ResponseEntity<>("Details are not available in DB", HttpStatus.NOT_FOUND);
 	}
 
-	/*
-	 * @ExceptionHandler(RestClientException.class) public ResponseEntity<String>
-	 * handleRestClientException(RestClientException restClientException){
-	 * 
-	 * return new ResponseEntity<>("Rest client", HttpStatus.BAD_GATEWAY); }
-	 */
-	/*
-	 * @ExceptionHandler(HttpClientErrorException.class) public
-	 * ResponseEntity<String>
-	 * handleHttpClientErrorException(HttpClientErrorException
-	 * httpClientErrorException){
-	 * 
-	 * return new ResponseEntity<>("Http client", HttpStatus.BAD_REQUEST); }
-	 */
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<String> handleBusinessException(BusinessException businessException) {
 
-		return new ResponseEntity<>(businessException.getErrorMessage(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(businessException.getErrorMessage(), HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@ExceptionHandler(BusinessException2.class)
