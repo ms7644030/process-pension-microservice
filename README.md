@@ -10,3 +10,4 @@ health =/api/process-pension-service/manage/health
 # Container Config Environment Variable
 
 AUTHORIZATION_SERVICE_URI
+PENSIONER_DETAIL_URI
